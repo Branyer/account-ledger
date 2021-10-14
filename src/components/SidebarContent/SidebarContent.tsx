@@ -1,5 +1,7 @@
 import React from "react"
 
+import { connect, ConnectedProps } from 'react-redux'
+
 import Divider from '@mui/material/Divider';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
@@ -11,7 +13,15 @@ import {useHistory} from "react-router-dom"
 
 import sidebarItems from "./sidebar_items";
 
-const SidebarContent: React.FC = () => {
+import {openModal} from "../../redux/actions/modal"
+
+import Login from "../Login"
+
+interface RootState  {
+   
+}
+
+const SidebarContent: React.FC<PropsFromRedux> = ({openModal}) => {
 
     let history = useHistory()
 
@@ -21,7 +31,16 @@ const SidebarContent: React.FC = () => {
             <Divider />
             <List>
                 {sidebarItems.map((item, index) => (
-                    <ListItem button key={item.text + index} onClick={()=> item.action(history) }>
+                    <ListItem button 
+                        key={item.text + index} 
+                        onClick={
+                            ()=> 
+                            item.link ? 
+                            item.action && item.action(history)  
+                            :
+                            item.type && openModal(item.type)
+                        }
+                    >
                         <ListItemIcon>
                             <item.icon />
                         </ListItemIcon>
@@ -35,4 +54,21 @@ const SidebarContent: React.FC = () => {
 
 }
 
-export default SidebarContent
+function mapStateToProps(state : RootState) {
+    
+    return  {
+        
+    }
+}
+
+function mapDispatchToProps(dispatch : any ) {
+    return  {
+        openModal: (type : string) => dispatch(openModal(<Login type={type} />))
+    }
+}
+
+const connector = connect(mapStateToProps, mapDispatchToProps)
+
+type PropsFromRedux = ConnectedProps<typeof connector>
+
+export default connector(SidebarContent)

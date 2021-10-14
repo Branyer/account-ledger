@@ -16,6 +16,7 @@ import {
 import Home from './views/Home';
 import Profile from './views/Profile';
 import Layout from './components/Layout';
+import Modal from "./components/Modal"
 
 const store = createStore(reducer, composeWithDevTools())
 
@@ -23,6 +24,7 @@ function App() {
   return (
     <Router>
       <Provider store={store}>
+        <Modal />
         <Layout>
           <Switch>
               <Route path="/home">
