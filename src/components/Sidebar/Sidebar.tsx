@@ -1,6 +1,10 @@
 import React from "react"
+
 import Drawer from '@mui/material/Drawer';
 import Box from "@mui/material/Box"
+
+import SidebarContent from "../SidebarContent"
+
 
 type Props = {
     drawerWidth: number,
@@ -9,6 +13,8 @@ type Props = {
 }
 
 const Sidebar: React.FC<Props> = ({ drawerWidth, mobileOpen, handleDrawerToggle }) => {
+
+    
 
     return (
 
@@ -29,7 +35,7 @@ const Sidebar: React.FC<Props> = ({ drawerWidth, mobileOpen, handleDrawerToggle 
                     '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
                 }}
             >
-                {/* {drawer} */}
+                <SidebarContent />
             </Drawer>
 
             <Drawer
@@ -40,7 +46,7 @@ const Sidebar: React.FC<Props> = ({ drawerWidth, mobileOpen, handleDrawerToggle 
                 }}
                 open
             >
-                {/* {drawer} */}
+               <SidebarContent />
             </Drawer>
         </Box>
     )
