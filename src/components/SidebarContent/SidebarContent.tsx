@@ -17,9 +17,7 @@ import {openModal} from "../../redux/actions/modal"
 
 import Login from "../Login"
 
-interface RootState  {
-   
-}
+import {RootState, AppDispatch} from "../../redux/store"
 
 const SidebarContent: React.FC<PropsFromRedux> = ({openModal}) => {
 
@@ -55,13 +53,10 @@ const SidebarContent: React.FC<PropsFromRedux> = ({openModal}) => {
 }
 
 function mapStateToProps(state : RootState) {
-    
-    return  {
-        
-    }
+    return  { }
 }
 
-function mapDispatchToProps(dispatch : any ) {
+function mapDispatchToProps(dispatch : AppDispatch ) {
     return  {
         openModal: (type : string) => dispatch(openModal(<Login type={type} />))
     }

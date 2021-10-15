@@ -10,12 +10,10 @@ import DialogTitle from '@mui/material/DialogTitle';
 
 import {closeModal} from "../../redux/actions/modal"
 
+import {RootState, AppDispatch} from "../../redux/store"
+
 interface Props extends PropsFromRedux  {
     type: string
-}
-
-interface RootState  {
-   
 }
 
 const Login : React.FC<Props> = ({type, handleClose}) => {
@@ -45,12 +43,12 @@ const Login : React.FC<Props> = ({type, handleClose}) => {
     )
 
 }
+
 function mapStateToProps(state : RootState) {
-    return  {
-    }
+    return  {}
 }
 
-function mapDispatchToProps(dispatch : any ) {
+function mapDispatchToProps(dispatch : AppDispatch ) {
     return  {
         handleClose: () => dispatch(closeModal())
     }

@@ -1,11 +1,6 @@
 import React from 'react';
 
-import {createStore} from "redux"
 import { Provider } from 'react-redux';
-
-import reducer from './redux/reducers';
-
-import {composeWithDevTools} from "redux-devtools-extension"
 
 import {
   BrowserRouter as Router,
@@ -18,7 +13,7 @@ import Profile from './views/Profile';
 import Layout from './components/Layout';
 import Modal from "./components/Modal"
 
-const store = createStore(reducer, composeWithDevTools())
+import {store} from "./redux/store"
 
 function App() {
   return (

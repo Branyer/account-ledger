@@ -3,15 +3,14 @@ import React from "react"
 import { connect, ConnectedProps } from 'react-redux'
 
 import Dialog from '@mui/material/Dialog';
-import {State} from "../../redux/reducers/modal"
 import {closeModal} from "../../redux/actions/modal"
 
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
 
-interface RootState  {
-    modal: State
-}
+import {RootState, AppDispatch} from "../../redux/store"
+
+
 
 const Modal: React.FC<PropsFromRedux> = ({open, content, handleClose}) => {
 
@@ -37,7 +36,7 @@ function mapStateToProps(state : RootState) {
     }
 }
 
-function mapDispatchToProps(dispatch : any ) {
+function mapDispatchToProps(dispatch : AppDispatch ) {
     return  {
         handleClose: () => dispatch(closeModal())
     }
