@@ -1,6 +1,6 @@
 import { User } from "firebase/auth";
 
-import { SIGN_UP, LOGIN, SET_ERROR, SET_USER } from "../actions/auth"
+import { SET_ERROR, SET_USER } from "../actions/auth"
 
 type Action = {
     type: string,
@@ -8,7 +8,7 @@ type Action = {
     error?: string,
 }
 
-type AuthState = {
+export type AuthState = {
     user: User | null,
     error: string | null
 }
@@ -19,7 +19,7 @@ const initialState: AuthState = {
     error: null
 }
 
-const authReducer = (state: AuthState = initialState, action: Action) => {
+const auth = (state: AuthState = initialState, action: Action) => {
 
     switch (action.type) {
 
@@ -41,4 +41,4 @@ const authReducer = (state: AuthState = initialState, action: Action) => {
 }
 
 
-export default authReducer
+export default auth

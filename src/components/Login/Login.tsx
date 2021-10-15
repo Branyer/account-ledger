@@ -19,9 +19,12 @@ import Box from '@mui/material/Box';
 import { makeStyles } from "@mui/styles";
 
 import { closeModal } from "../../redux/actions/modal"
-import { signUp } from "../../redux/actions/auth";
+import { signUp, login } from "../../redux/actions/auth";
 
 import { RootState, AppDispatch } from "../../redux/store"
+
+
+
 
 interface Props extends PropsFromRedux {
     type: string
@@ -63,20 +66,21 @@ const Login: React.FC<Props> = ({ type, handleClose, signUp }) => {
     const handleSubmit = (e : React.FormEvent<HTMLFormElement>) => {
 
         e.preventDefault()
-        //TODO send values to firebase
-        console.log(values)
 
-        if(type === "Login") {
+        if(type === "Login")  login(values)
+        else {
 
+            if(values.password === values.confirmed_password) {
 
-        } else {
+                signUp(values)
 
+            } else {
 
-            signUp(values)
+                //TODO snackbar message
 
-        }
+            }
 
-
+        } 
     }
 
     return (
@@ -130,7 +134,7 @@ const Login: React.FC<Props> = ({ type, handleClose, signUp }) => {
                             />
                         </FormGroup>
 
-
+                        {type !== "Login" &&
                         <FormGroup className={classes.formControl}>
                             <InputLabel >Confirm Password</InputLabel>
                             <FilledInput
@@ -151,7 +155,7 @@ const Login: React.FC<Props> = ({ type, handleClose, signUp }) => {
                                     </InputAdornment>
                                 }
                             />
-                        </FormGroup>
+                        </FormGroup>}
                     </DialogContent>
                     <DialogActions className={classes.formControl}>
                         <Button type="submit" color="primary" variant="contained">Create an Account</Button>
@@ -171,7 +175,8 @@ function mapStateToProps(state: RootState) {
 function mapDispatchToProps(dispatch: any) {
     return {
         handleClose: () => dispatch(closeModal()),
-        signUp: (data : {email:string, password: string}) => dispatch(signUp(data))
+        signUp: (data : {email:string, password: string}) => dispatch(signUp(data)),
+        login: (data : {email:string, password: string}) => dispatch(login(data))
     }
 }
 

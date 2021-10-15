@@ -1,12 +1,16 @@
 import {createUserWithEmailAndPassword, signInWithEmailAndPassword,  UserCredential, User} from "firebase/auth";
-import {auth} from "../../firebaseconfig" 
+
+import { getFirestore, setDoc, doc, Timestamp } from "firebase/firestore";
+
+import {auth,} from "../../firebaseconfig" 
 
 import { AppDispatch } from "../store";
 
-export const SIGN_UP = "SIGN_UP"
-export const LOGIN = "LOGIN"
+
 export const SET_USER = "SET_USER"
 export const SET_ERROR = "SET_ERROR"
+
+const db = getFirestore()
 
 type formData = {
     email: string,
@@ -32,23 +36,34 @@ const setUser = (user: User) => {
 }
 
 export const signUp = (data: formData ) => {
-    return (dispatch: AppDispatch) => {
+    return  (dispatch: AppDispatch) => {
       
         createUserWithEmailAndPassword(auth, data.email, data.password)
-        .then((userCredential : UserCredential) => {
+        .then(async (userCredential : UserCredential) => {
             // Signed in 
             const user = userCredential.user;
 
-            //TODO create firestore user
+            try {
+               await setDoc(doc(db, `users`, user.uid), {
+                created_at: Timestamp.now()
+               });
+               
+            } catch (e) {
+                console.error("Error adding document: ", e);
+            }
 
             dispatch(setUser(user))
-            // ...
+        
         })
         .catch((error) => {
             const errorCode = error.code;
             const errorMessage = error.message;
            
             dispatch(setError(`code: ${errorCode} | message: ${errorMessage}`))
+
+            setTimeout(() => {
+                dispatch(setError(""))
+            }, 3000 )
           
         });
     }
@@ -56,18 +71,22 @@ export const signUp = (data: formData ) => {
 }
 
 
-export const Login = (data: formData) => {
+export const login = (data: formData) => {
     return (dispatch: AppDispatch) => {
         signInWithEmailAndPassword(auth, data.email, data.password)
         .then((userCredential) => {
             // Signed in
             const user = userCredential.user;
-            console.log("user", user)
-            // ...
+            dispatch(setUser(user))
         })
         .catch((error) => {
             const errorCode = error.code;
             const errorMessage = error.message;
+            dispatch(setError(`code: ${errorCode} | message: ${errorMessage}`))
+
+            setTimeout(() => {
+                dispatch(setError(""))
+            }, 3000 )
         });
     }
 

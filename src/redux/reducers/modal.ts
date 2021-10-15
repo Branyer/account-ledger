@@ -8,7 +8,7 @@ type Action = {
     open?: boolean
 }
 
-type ModalState = {
+export type ModalState = {
     content: React.ReactNode | null,
     open: boolean
 }

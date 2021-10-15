@@ -14,7 +14,8 @@ export type SidebarItem = {
     icon: React.FC,
     action?: Function,
     link: boolean,
-    type?: string
+    type?: string,
+    auth: boolean
 
 }
 
@@ -24,24 +25,28 @@ const sidebarItems: SidebarItem[] = [
         text: "Home",
         icon: HomeIcon,
         link: true,
+        auth: true,
         action: (history: History) => history.push("/home"),
     },
     {
         text: "Profile",
         icon: RecentActorsIcon,
         link: true,
+        auth: true,
         action: (history: History) => history.push("/account/profile"),
     },
     {
         text: "Reports",
         icon: AssessmentIcon,
         link: true,
+        auth: true,
         action: (history: History) => history.push("/account/reports"),
     },
     {
         text: "Login",
         icon: LoginIcon,
         link: false,
+        auth: false,
         type: "Login",
         
     },
@@ -49,6 +54,7 @@ const sidebarItems: SidebarItem[] = [
         text: "Sign Up",
         icon: AssignmentIcon,
         link: false,
+        auth: false,
         type: "Sign Up",
 
     }

@@ -19,9 +19,14 @@ import Login from "../Login"
 
 import {RootState, AppDispatch} from "../../redux/store"
 
-const SidebarContent: React.FC<PropsFromRedux> = ({openModal}) => {
+
+import { User} from "firebase/auth";
+
+const SidebarContent: React.FC<PropsFromRedux> = ({openModal, user}) => {
 
     let history = useHistory()
+
+    let userBool : boolean = Boolean(user)
 
     return (
         <div>
@@ -29,21 +34,30 @@ const SidebarContent: React.FC<PropsFromRedux> = ({openModal}) => {
             <Divider />
             <List>
                 {sidebarItems.map((item, index) => (
-                    <ListItem button 
-                        key={item.text + index} 
-                        onClick={
-                            ()=> 
-                            item.link ? 
-                            item.action && item.action(history)  
+                    <>
+                        {
+                            userBool === item.auth ? 
+
+                            <ListItem button 
+                                key={item.text + index} 
+                                onClick={
+                                    ()=> 
+                                    item.link ? 
+                                    item.action && item.action(history)  
+                                    :
+                                    item.type && openModal(item.type)
+                                }
+                            >
+                                <ListItemIcon>
+                                    <item.icon />
+                                </ListItemIcon>
+                                <ListItemText primary={item.text} />
+                            </ListItem>
                             :
-                            item.type && openModal(item.type)
+                            null
+
                         }
-                    >
-                        <ListItemIcon>
-                            <item.icon />
-                        </ListItemIcon>
-                        <ListItemText primary={item.text} />
-                    </ListItem>
+                    </>
                 ))}
             </List>
             <Divider />
@@ -53,7 +67,10 @@ const SidebarContent: React.FC<PropsFromRedux> = ({openModal}) => {
 }
 
 function mapStateToProps(state : RootState) {
-    return  { }
+
+    let props : { user: User | null} = { user : state.auth.user }
+
+    return  props 
 }
 
 function mapDispatchToProps(dispatch : AppDispatch ) {
