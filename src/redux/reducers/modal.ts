@@ -8,19 +8,19 @@ type Action = {
     open?: boolean
 }
 
-export type State = {
+type ModalState = {
     content: React.ReactNode | null,
     open: boolean
 }
 
 
-const initialState : State = {
+const initialState : ModalState = {
     content: null,
     open: false
 }
 
 
-const modal = (state : State = initialState, action : Action) => {
+const modal = (state : ModalState = initialState, action : Action) => {
 
     switch (action.type) {
         case OPEN_MODAL:
