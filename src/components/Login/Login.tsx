@@ -19,6 +19,7 @@ import Box from '@mui/material/Box';
 import { makeStyles } from "@mui/styles";
 
 import { closeModal } from "../../redux/actions/modal"
+import { signUp } from "../../redux/actions/auth";
 
 import { RootState, AppDispatch } from "../../redux/store"
 
@@ -42,7 +43,7 @@ const useStyles: Function = makeStyles({
     }
 })
 
-const Login: React.FC<Props> = ({ type, handleClose }) => {
+const Login: React.FC<Props> = ({ type, handleClose, signUp }) => {
 
     const [showPassword, setShowPassword] = useState<boolean>(false)
     const [values, setValues] = useState({ email: "", password: "", confirmed_password: "" })
@@ -64,6 +65,17 @@ const Login: React.FC<Props> = ({ type, handleClose }) => {
         e.preventDefault()
         //TODO send values to firebase
         console.log(values)
+
+        if(type === "Login") {
+
+
+        } else {
+
+
+            signUp(values)
+
+        }
+
 
     }
 
@@ -156,9 +168,10 @@ function mapStateToProps(state: RootState) {
     return {}
 }
 
-function mapDispatchToProps(dispatch: AppDispatch) {
+function mapDispatchToProps(dispatch: any) {
     return {
-        handleClose: () => dispatch(closeModal())
+        handleClose: () => dispatch(closeModal()),
+        signUp: (data : {email:string, password: string}) => dispatch(signUp(data))
     }
 }
 
