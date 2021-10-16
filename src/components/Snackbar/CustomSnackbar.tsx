@@ -1,19 +1,11 @@
 import React from "react"
 import { connect, ConnectedProps } from 'react-redux'
-
-import Snackbar, { SnackbarOrigin } from '@mui/material/Snackbar';
-import MuiAlert, { AlertProps, AlertColor } from '@mui/material/Alert';
-
-
 import { RootState, AppDispatch } from "../../redux/store";
+
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert, {AlertProps} from '@mui/material/Alert';
+
 import { closeSnackbar } from "../../redux/actions/snackbar";
-
-interface State extends SnackbarOrigin {
-    open: boolean;
-    
-}
-
-
 
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
   props,
@@ -23,17 +15,16 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
 });
 
 const CustomSnackbar : React.FC<PropsFromRedux> = ({open, message, severity, closeSnackbar}) => {
-
-
+ 
     return (
         <> 
             <Snackbar
-                autoHideDuration={2500}
+                // autoHideDuration={2000}
                 anchorOrigin={{ vertical: "top", horizontal: "center" }}
                 open={open}
-                onClose={closeSnackbar}
+                onClose={() => closeSnackbar()}
             >
-                <Alert onClose={closeSnackbar} severity={severity} sx={{ width: '100%' }}>
+                <Alert onClose={() => closeSnackbar()} severity={severity} sx={{ width: '100%' }}>
                     {message}
                 </Alert>
             </Snackbar>
@@ -61,4 +52,4 @@ const connector = connect(mapStateToProps, mapDispatchToProps)
 
 type PropsFromRedux = ConnectedProps<typeof connector>
 
-export default connector(CustomSnackbar)
+export default connector(React.memo(CustomSnackbar))

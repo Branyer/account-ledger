@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
+// import { getAnalytics } from "firebase/analytics";
 
 import { getAuth } from "firebase/auth";
 // TODO: Add SDKs for Firebase products that you want to use
@@ -20,4 +20,4 @@ const firebaseConfig = {
 // Initialize Firebase
 export const app = initializeApp(firebaseConfig);
 export const auth = getAuth();
-const analytics = getAnalytics(app);
+// const analytics = getAnalytics(app);

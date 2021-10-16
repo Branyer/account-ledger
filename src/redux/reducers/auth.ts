@@ -1,22 +1,28 @@
 import { User } from "firebase/auth";
 
-import { SET_ERROR, SET_USER } from "../actions/auth"
+import { SET_ERROR, SET_USER, SET_SUCCESS, SET_LOADING } from "../actions/auth"
 
 type Action = {
     type: string,
     user?: User,
     error?: string,
+    success?: boolean,
+    loading?: boolean
 }
 
 export type AuthState = {
     user: User | null,
-    error: string | null
+    error: string | null,
+    success: string | null,
+    loading: string | null
 }
 
 
 const initialState: AuthState = {
     user: null,
-    error: null
+    error: null,
+    success: null,
+    loading: null
 }
 
 const auth = (state: AuthState = initialState, action: Action) => {
@@ -28,11 +34,20 @@ const auth = (state: AuthState = initialState, action: Action) => {
                 ...state,
                 user: action.user
             }
-
         case SET_ERROR:
             return {
                 ...state,
                 error: action.error
+            }
+        case SET_SUCCESS:
+            return {
+                ...state,
+                success: action.success
+            }
+        case SET_LOADING:
+            return {
+                ...state,
+                loading: action.loading
             }
 
         default:

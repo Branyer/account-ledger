@@ -38,7 +38,6 @@ const snackbar = (state : SnackbarState = initialState, action : Action) => {
             return  {
                 ...state,
                 message: "",
-                severity: undefined,
                 open: false
             }
         default:

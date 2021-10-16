@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { connect, ConnectedProps } from 'react-redux'
 
 import Button from '@mui/material/Button';
@@ -15,14 +15,16 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import InputAdornment from '@mui/material/InputAdornment';
 import IconButton from '@mui/material/IconButton';
 import Box from '@mui/material/Box';
+import { AlertColor } from "@mui/material";
 
 import { makeStyles } from "@mui/styles";
 
 import { closeModal } from "../../redux/actions/modal"
 import { signUp, login } from "../../redux/actions/auth";
 
-import { RootState, AppDispatch } from "../../redux/store"
+import { RootState} from "../../redux/store"
 
+import {closeSnackbar, showSnackbar} from "../../redux/actions/snackbar"
 
 
 
@@ -46,13 +48,24 @@ const useStyles: Function = makeStyles({
     }
 })
 
-const Login: React.FC<Props> = ({ type, handleClose, signUp }) => {
+const Login: React.FC<Props> = (
+    { 
+     type, 
+     handleClose, 
+     signUp, 
+     error, 
+     loading, 
+     success, 
+     open,
+     showSnackbar,
+     closeSnackbar
+    }) => {
 
     const [showPassword, setShowPassword] = useState<boolean>(false)
     const [values, setValues] = useState({ email: "", password: "", confirmed_password: "" })
+    const [formError, setFormError] = useState<string | null>(null)
 
     const classes = useStyles()
-
 
     const handleChangeValues = (name: string, value: string) => {
         
@@ -62,6 +75,19 @@ const Login: React.FC<Props> = ({ type, handleClose, signUp }) => {
         }))
 
     }
+
+    //TODO crear un custom hook para esto
+
+    useEffect(() => {
+        if(error) showSnackbar(error, "error")
+        if(loading) showSnackbar(loading, "info")
+        if(success) showSnackbar(success, "success")
+        if(formError) showSnackbar(formError, "error")
+
+        if(!error && !loading && !success && !formError && open) closeSnackbar()
+
+    }, [error, loading, success, formError, open, closeSnackbar, showSnackbar ])
+
 
     const handleSubmit = (e : React.FormEvent<HTMLFormElement>) => {
 
@@ -76,7 +102,11 @@ const Login: React.FC<Props> = ({ type, handleClose, signUp }) => {
 
             } else {
 
-                //TODO snackbar message
+                setFormError("Las contraseñas no coinciden")
+
+                setTimeout(() => {
+                    setFormError(null)
+                }, 3000)
 
             }
 
@@ -169,14 +199,22 @@ const Login: React.FC<Props> = ({ type, handleClose, signUp }) => {
 }
 
 function mapStateToProps(state: RootState) {
-    return {}
+    return {
+        error: state.auth.error,
+        success: state.auth.success,
+        loading: state.auth.loading,
+        open: state.snackbar.open
+       
+    }
 }
 
 function mapDispatchToProps(dispatch: any) {
     return {
         handleClose: () => dispatch(closeModal()),
         signUp: (data : {email:string, password: string}) => dispatch(signUp(data)),
-        login: (data : {email:string, password: string}) => dispatch(login(data))
+        login: (data : {email:string, password: string}) => dispatch(login(data)),
+        showSnackbar: (message : string, severity : AlertColor) => dispatch(showSnackbar(message, severity)),
+        closeSnackbar: () => dispatch(closeSnackbar())
     }
 }
 
