@@ -11,7 +11,7 @@ type Action = {
 }
 
 export type AuthState = {
-    user: User | null,
+    user: User | null | undefined,
     error: string | null,
     success: string | null,
     loading: string | null
@@ -19,7 +19,7 @@ export type AuthState = {
 
 
 const initialState: AuthState = {
-    user: null,
+    user: undefined,
     error: null,
     success: null,
     loading: null

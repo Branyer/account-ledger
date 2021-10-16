@@ -8,6 +8,7 @@ import Toolbar from '@mui/material/Toolbar';
 import Sidebar from "../Sidebar";
 import Appbar from "../Appbar";
 
+import useAuth from '../../hooks/useAuth';
 
 const drawerWidth = 240
 
@@ -18,6 +19,8 @@ type Props = {
 const Layout: React.FC<Props> = ({ children }) => {
 
     const [mobileOpen, setMobileOpen] = useState(false);
+
+    useAuth()
 
     const handleDrawerToggle = useCallback(() => {
         setMobileOpen(value => !value);

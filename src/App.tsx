@@ -16,7 +16,11 @@ import CustomSnackbar from './components/Snackbar';
 
 import {store} from "./redux/store"
 
+
+
 function App() {
+  
+
   return (
     <Router>
       <Provider store={store}>

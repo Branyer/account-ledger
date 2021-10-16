@@ -1,4 +1,12 @@
-import {createUserWithEmailAndPassword, signInWithEmailAndPassword,  UserCredential, User} from "firebase/auth";
+import {
+    createUserWithEmailAndPassword, 
+    signInWithEmailAndPassword, 
+    signOut as authSignOut,
+    setPersistence, 
+    browserLocalPersistence, 
+    UserCredential, 
+    User
+} from "firebase/auth";
 
 import { getFirestore, setDoc, doc, Timestamp } from "firebase/firestore";
 
@@ -46,7 +54,7 @@ const setLoading = (loading: string | null) => {
 
 }
 
-const setUser = (user: User) => {
+export const setUser = (user: User | null | undefined) => {
 
     return {
         type: SET_USER,
@@ -59,8 +67,11 @@ export const signUp = (data: formData ) => {
     return  (dispatch: AppDispatch) => {
       
         dispatch(setLoading("Se esta creando al usuario"))
-
-        createUserWithEmailAndPassword(auth, data.email, data.password)
+      
+        setPersistence(auth, browserLocalPersistence)
+        .then(() => {
+            return createUserWithEmailAndPassword(auth, data.email, data.password)
+        })
         .then(async (userCredential : UserCredential) => {
             // Signed in 
             const user = userCredential.user;
@@ -87,7 +98,8 @@ export const signUp = (data: formData ) => {
         .catch((error) => {
             const errorCode = error.code;
             const errorMessage = error.message;
-           
+
+            dispatch(setLoading(null))
             dispatch(setError(`code: ${errorCode} | message: ${errorMessage}`))
 
             setTimeout(() => {
@@ -99,13 +111,43 @@ export const signUp = (data: formData ) => {
 
 }
 
+export const signOut = () => {
+
+    return (dispatch: AppDispatch) => {
+
+        dispatch(setLoading("Cerrando Sesion"))
+
+        authSignOut(auth)
+        .then(() => {
+
+            dispatch(setLoading(null))
+            dispatch(setUser(null))
+            dispatch(setSuccess("Se ha cerrado sesion satisfactoriamente"))
+
+            setTimeout(() => {
+                dispatch(setSuccess(null))
+            }, 3000 )
+
+        }).catch((err) => {
+
+            dispatch(setLoading(null))
+            dispatch(setError("Error Cerrando Sesion"))
+
+        })
+     }
+
+
+}
 
 export const login = (data: formData) => {
     return (dispatch: AppDispatch) => {
 
         dispatch(setLoading("Iniciando Sesion"))
 
-        signInWithEmailAndPassword(auth, data.email, data.password)
+        setPersistence(auth, browserLocalPersistence)
+        .then(() => {
+            return signInWithEmailAndPassword(auth, data.email, data.password)
+        })
         .then((userCredential) => {
             // Signed in
             const user = userCredential.user;
@@ -122,6 +164,7 @@ export const login = (data: formData) => {
         .catch((error) => {
             const errorCode = error.code;
             const errorMessage = error.message;
+            dispatch(setLoading(null))
             dispatch(setError(`code: ${errorCode} | message: ${errorMessage}`))
 
             setTimeout(() => {
