@@ -20,20 +20,11 @@ const useSnackbarMessages = (values : Value[]) => {
         let nullCount : number = 0
 
         values.forEach((item : Value) => {
-
-            if(item.value){
-
-                dispatch(showSnackbar(item.value, item.severity))
-            } else {
-
-                nullCount++
-            }
-
+            if(item.value) dispatch(showSnackbar(item.value, item.severity))
+            else nullCount++
         })
 
         if( nullCount === values.length && open) dispatch(closeSnackbar())
-    
-
        
     }, [dispatch, values, open ])
 
